@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String         @id @default(uuid())
+  name         String
+  email        String         @unique
+  password     String
+  role         Role           @default(EMPLOYEE)
+
+   team         String?        // ✅ NEW: Team name (e.g., Engineering)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  // Relations
+  expenses      Expense[]
+  notifications Notification[]
+}
+
+model Expense {
+  id          String   @id @default(uuid())
+  amount      Float
+  category    String
+  project     String?     // ✅ Optional
+  date        DateTime    // ✅ Required
+  notes       String?
+  receipt     String?
+  status      Status     @default(PENDING)
+
+  employeeId  String
+  employee    User       @relation(fields: [employeeId], references: [id])
+
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Notification {
+  id        String    @id @default(uuid())
+  message   String
+  read      Boolean   @default(false)
+  type      String
+  createdAt DateTime  @default(now())
+
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+}
+
+model Budget {
+  id        String   @id @default(uuid())
+  team      String   // e.g. Engineering, Sales, etc.
+  limit     Float    // Monthly budget limit
+  month     String   // e.g. April 2025
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  ADMIN
+  MANAGER
+  EMPLOYEE
+}
+
+enum Status {
+  PENDING
+  APPROVED
+  REJECTED
+}

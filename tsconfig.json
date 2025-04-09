@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "commonjs",
+    "rootDir": ".",                     // ✅ Allow files from root (not just src)
+    "outDir": "dist",
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "baseUrl": "./src"                  // ✅ Still resolve modules from src
+  },
+  "include": ["src", "tests"]           // ✅ Include both src and tests folders
+}
