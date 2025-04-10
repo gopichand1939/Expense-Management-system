@@ -3,22 +3,36 @@ import { prisma } from '../config/client';
 import { sendEmail } from '../services/email.service';
 import dayjs from 'dayjs';
 
-// ✅ Get all PENDING expenses submitted by employees
+// ✅ Get all expenses submitted by employees of same team
 export const getPendingExpenses = async (req: Request, res: Response): Promise<void> => {
   try {
+    const team = (req as any).user.team;
+
     const expenses = await prisma.expense.findMany({
-      where: { status: 'PENDING' },
+      where: { employee: { team } },
       include: {
         employee: {
-          select: { id: true, name: true, email: true },
+          select: { name: true },
         },
       },
+      orderBy: { createdAt: 'desc' },
     });
 
-    res.status(200).json({ expenses });
+    // ✅ Format for frontend
+    const formatted = expenses.map((e) => ({
+      id: e.id,
+      employeeName: e.employee.name,
+      amount: e.amount,
+      category: e.category,
+      date: e.date,
+      status: e.status,
+      receipt: e.receipt,
+    }));
+
+    res.status(200).json({ expenses: formatted });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Failed to fetch pending expenses' });
+    res.status(500).json({ message: 'Failed to fetch expenses' });
   }
 };
 
@@ -29,10 +43,9 @@ export const updateExpenseStatus = async (req: Request, res: Response): Promise<
     const { status } = req.body;
 
     if (!['APPROVED', 'REJECTED'].includes(status)) {
-        res.status(400).json({ message: 'Invalid status. Must be APPROVED or REJECTED' });
-        return;
-      }
-      
+      res.status(400).json({ message: 'Invalid status. Must be APPROVED or REJECTED' });
+      return;
+    }
 
     const expense = await prisma.expense.update({
       where: { id },
@@ -47,10 +60,8 @@ export const updateExpenseStatus = async (req: Request, res: Response): Promise<
         ? `Your expense of ₹${expense.amount} has been approved ✅`
         : `Your expense of ₹${expense.amount} has been rejected ❌`;
 
-    // ✅ Send email
     await sendEmail(expense.employee.email, `Expense ${status}`, message);
 
-    // ✅ Create in-app notification
     await prisma.notification.create({
       data: {
         userId: expense.employee.id,
@@ -69,11 +80,10 @@ export const updateExpenseStatus = async (req: Request, res: Response): Promise<
   }
 };
 
-// ✅ Manager dashboard with teamOverview & pending expenses
+// ✅ Manager dashboard with team budget summary
 export const getManagerDashboard = async (req: Request, res: Response): Promise<void> => {
   try {
     const team = (req as any).user.team;
-
     const currentMonth = dayjs().format('MMMM YYYY');
     const [monthName, year] = currentMonth.split(' ');
     const start = dayjs(`01 ${monthName} ${year}`).startOf('month').toDate();
@@ -91,18 +101,6 @@ export const getManagerDashboard = async (req: Request, res: Response): Promise<
       },
     });
 
-    const pendingExpenses = await prisma.expense.findMany({
-      where: {
-        employee: { team },
-        status: 'PENDING',
-      },
-      include: {
-        employee: {
-          select: { name: true, email: true },
-        },
-      },
-    });
-
     const used = approvedExpenses.reduce((sum, e) => sum + e.amount, 0);
     const remaining = (budget?.limit || 0) - used;
 
@@ -115,7 +113,6 @@ export const getManagerDashboard = async (req: Request, res: Response): Promise<
         remaining,
         isOverspent: remaining < 0,
       },
-      expenses: pendingExpenses,
     });
   } catch (error) {
     console.error(error);

@@ -1,3 +1,5 @@
+// ✅ File: src/controllers/auth.controller.ts
+
 import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
@@ -6,11 +8,7 @@ import jwt from 'jsonwebtoken';
 const prisma = new PrismaClient();
 const JWT_SECRET = process.env.JWT_SECRET || 'secret';
 
-/**
- * ✅ Signup handler
- * - Changed return type from Promise<Response> ❌ to Promise<void> ✅
- */
-const signup = async (req: Request, res: Response): Promise<void> => {
+export const signup = async (req: Request, res: Response): Promise<void> => {
   const { name, email, password, role } = req.body;
 
   const existing = await prisma.user.findUnique({ where: { email } });
@@ -28,11 +26,7 @@ const signup = async (req: Request, res: Response): Promise<void> => {
   res.status(201).json({ message: 'User created', user });
 };
 
-/**
- * ✅ Login handler
- * - Changed return type from Promise<Response> ❌ to Promise<void> ✅
- */
-const login = async (req: Request, res: Response): Promise<void> => {
+export const login = async (req: Request, res: Response): Promise<void> => {
   const { email, password } = req.body;
 
   const user = await prisma.user.findUnique({ where: { email } });
@@ -47,12 +41,16 @@ const login = async (req: Request, res: Response): Promise<void> => {
     return;
   }
 
-  const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, {
-    expiresIn: '1d',
-  });
+  const token = jwt.sign(
+    {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+      team: user.team, // ✅ Required for Manager
+    },
+    JWT_SECRET,
+    { expiresIn: '1d' }
+  );
 
   res.status(200).json({ message: 'Login success', token });
 };
-
-// ✅ NAMED exports only — no default export!
-export { signup, login };
