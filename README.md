@@ -1,6 +1,223 @@
-Perfect, kanna! We'll now begin testing your Expense Management System backend step-by-step in Postman using the new Admin user: **Gopichand** (`admin@gopichand.com`). Let's start with **Step 1**.
+# 💼 Expense Management System (Multi-Role) – Backend
+
+This is the backend implementation of a **Multi-Role Expense Management System**, developed and tested end-to-end by me (Tummapala Gopichand). It is designed for seamless role-based interaction between Admin, Manager, and Employee.
 
 ---
+
+## 🚀 Project Features (Backend)
+
+- 🔐 JWT Authentication & Role-Based Authorization
+- 📤 Expense Submission with File Uploads
+- ✅ Manager Approval & Rejection Workflow
+- 💰 Budget Assignment and Overspending Alerts
+- 📊 Role-Based Dashboards with Analytics Data
+- 📨 In-App + Email Notifications
+- 🧾 Audit Logging, Prisma ORM, File Serving
+
+---
+
+## 📁 Folder Structure
+
+```
+backend/
+├─ prisma/                    # Prisma schema, migrations
+│  ├─ schema.prisma
+│  └─ migrations/
+├─ src/
+│  ├─ config/                # Prisma client setup
+│  ├─ controllers/           # All role-based logic
+│  ├─ middleware/            # JWT auth, role check, logger
+│  ├─ routes/                # Express routes per role
+│  ├─ services/              # Email services
+│  ├─ utils/                 # Helpers for upload, mailer
+│  └─ index.ts               # Entry point
+├─ uploads/                  # Uploaded receipts (PDF, PNG)
+├─ .env                      # Environment config (DB, SMTP)
+├─ jest.config.js            # Unit testing config
+├─ package.json              # Dependencies & scripts
+└─ tsconfig.json             # TypeScript configuration
+```
+
+---
+
+## 📦 How to Install & Run Backend Locally
+
+### Step 1: Clone the Repository
+```bash
+git clone https://github.com/gopichand1939/Expense-Management-system.git
+cd Expense-Management-system/backend
+```
+
+### Step 2: Install Dependencies
+```bash
+npm install
+```
+
+### Step 3: Configure `.env`
+Create a `.env` file and add:
+```env
+DATABASE_URL=postgresql://<username>:<password>@localhost:5432/<dbname>?schema=public
+JWT_SECRET=your_secret
+EMAIL_USER=your_email@gmail.com
+EMAIL_PASS=your_app_password
+```
+
+### Step 4: Set up Database with Prisma
+```bash
+npx prisma generate
+npx prisma migrate dev --name init
+```
+
+### Step 5: Start the Server
+```bash
+npm run dev
+```
+> Server runs at: `http://localhost:5000`
+
+---
+
+## 🔌 Tested Endpoints & Sample Payloads
+
+### 🔐 Authentication
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST   | /auth/signup | Register new user (Admin only) |
+| POST   | /auth/login  | Login, returns JWT token |
+
+```json
+// Login Request
+{
+  "email": "admin@gopichand.com",
+  "password": "admin123"
+}
+```
+
+---
+
+### 👤 Admin Routes
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST   | /admin/create-user | Create Manager or Employee |
+| GET    | /admin/dashboard | View system-wide data |
+
+---
+
+### 🧑‍💼 Manager Routes
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET    | /manager/dashboard | View team status, budgets |
+| GET    | /manager/expenses | List pending team expenses |
+| PATCH  | /manager/expenses/:id | Approve/Reject expense |
+
+```json
+// Approve Expense
+{
+  "status": "APPROVED"
+}
+```
+
+---
+
+### 🧑‍🔧 Employee Routes
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST   | /expenses/submit | Submit a new expense (form-data) |
+
+**Form-Data Payload:**
+| Key | Value |
+|-----|-------|
+| amount | 2500 |
+| category | Travel |
+| project | EMS |
+| date | 2025-04-09 |
+| notes | Site visit |
+| receipt | (file upload) |
+
+---
+
+### 📊 Dashboard Routes
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET    | /dashboard/team-budget | Budget status by team/month |
+| GET    | /dashboard/charts | Pie/Bar chart summary |
+
+---
+
+### 💰 Budget Routes (Admin Only)
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST   | /budget/set | Set monthly team budget |
+
+```json
+{
+  "team": "Engineering",
+  "limit": 50000,
+  "month": "April 2025"
+}
+```
+
+---
+
+### 📬 Notifications
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET    | /notifications | Fetch in-app notifications |
+
+---
+
+## ✅ Live Test Users (for Postman Testing)
+
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | admin@gopichand.com | admin123 |
+| Manager | manager@gopichand.com | manager123 |
+| Employee | employee@gopichand.com | employee123 |
+
+---
+
+## 📁 Upload Access Test
+Uploaded receipts can be accessed at:
+```
+GET http://localhost:5000/uploads/<FILENAME>
+```
+
+Example:
+```
+http://localhost:5000/uploads/1744164533849-akamai_cover_letter.pdf
+```
+
+---
+
+## 📧 Email Setup (via Nodemailer)
+Works using Gmail App Passwords.
+Emails are sent on:
+- Expense Submission
+- Approval/Rejection
+
+---
+
+## ✅ Testing Tools Used
+- Postman – API testing
+- Prisma Studio – Database GUI
+- Jest – Unit testing setup
+
+---
+
+## 🧠 Author
+**Tummapala Gopichand**  
+Email: tummapalagopichand@gmail.com  
+GitHub: [gopichand1939](https://github.com/gopichand1939)
+
+> This backend is fully tested and connected to a role-based React + Tailwind frontend. All APIs are production-ready and secure.
+
+---
+
+**📎 Note:** All tokens used for testing are valid and scoped by role. Always include:
+```
+Authorization: Bearer <your_token>
+```
+
+
 
 ### ✅ **Step 1: Admin Signup**
 
@@ -80,10 +297,7 @@ POST http://localhost:5000/auth/login
 
 ```
 
-👉 **Copy the `token` from this response** — you will need to use it in the **Authorization header** for all protected endpoints.
 
-Set it in Postman under **Authorization → Bearer Token** like this:
-```
 Bearer your_admin_jwt_token_here
 
 {
@@ -96,12 +310,7 @@ Bearer your_admin_jwt_token_here
 
 
 
-Perfect, here's **✅ Step 3** in your Postman testing:
-
 ---
-
-### ✅ Step 3: Admin Creates a Manager (or Employee)
-
 **➡️ Endpoint:**  
 ```
 POST http://localhost:5000/admin/create-user
@@ -123,7 +332,7 @@ Content-Type: application/json
 }
 ```
 
-📌 **Expected Result:**
+*Expected Result:**
 ```json
 {
   "message": "User created by Admin successfully",
@@ -137,9 +346,7 @@ Content-Type: application/json
 ```
 
 ---
-
-✅ After successful response, say:  
-`next kanna` to continue to **Step 4: Create Gopichand Employee**.
+**Step 4: Create Gopichand Employee**.
 
 {
     "message": "User created by Admin successfully",
@@ -195,10 +402,7 @@ Content-Type: application/json
 }
 ```
 
----
-
-✅ After success, reply with:  
-**`next kanna`** to proceed to **Step 5: Login as Manager** 💼.
+---**Step 5: Login as Manager** 💼.
 
 {
     "message": "User created by Admin successfully",
@@ -212,7 +416,7 @@ Content-Type: application/json
 ![alt text](image-3.png)
 
 
-Awesome bujji 💖! Here’s **✅ Step 5: Login as Manager**
+ Login as Manager**
 
 ---
 
@@ -239,12 +443,8 @@ POST http://localhost:5000/auth/login
 }
 ```
 
-🔑 **Copy the token** from this response. We'll need it in future steps for manager actions like approving expenses.
 
----
-
-Once done, reply:  
-**`next kanna`** for **Step 6: Login as Employee** 👨‍💻
+**Step 6: Login as Employee** 👨‍💻
 
 {
     "message": "Login success",
@@ -254,9 +454,8 @@ Once done, reply:
 ![alt text](image-4.png)
 
 
-Perfect bujji! 🎯 That token is now your **Manager Token** 🛡️ — save it, we’ll use it for approval actions soon!
+**Manager Token** 🛡️
 
----
 
 ### ✅ Step 6: Login as Employee
 
@@ -281,12 +480,10 @@ POST http://localhost:5000/auth/login
 }
 ```
 
-🔑 Copy the **employee token** — we’ll use it for submitting expenses.
 
 ---
 
-Once you test this and get the token, just reply:
-**`next kanna`** to move on to **Step 7: Submit an Expense (Employee)** 💸
+**Step 7: Submit an Expense (Employee)** 💸
 
 {
     "message": "Login success",
@@ -294,10 +491,6 @@ Once you test this and get the token, just reply:
 }
 
 ![alt text](image-6.png)
-
-
-
-Awesome bujji! 💸 Let’s roll into the most important one now:
 
 ---
 
@@ -340,8 +533,7 @@ Bearer <EMPLOYEE_TOKEN>
 }
 ```
 
-Once successful, reply:
-**`next kanna`** to move on to **Step 8: View Pending Expenses (Manager)** 👨‍💼✅
+**Step 8: View Pending Expenses (Manager)** 👨‍💼✅
 
 {
     "message": "Expense submitted successfully",
@@ -383,9 +575,7 @@ Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIyMzcxYTg0LWJhMGEtNGFmZi1h
     
 ](image-8.png)
 
-Perfect bujji 💕! That means your **Manager user was already created successfully** before — no need to create again!
-
-We're fully ✅ good for **Step 3**.
+ **Step 3**.
 
 ---
 
@@ -427,15 +617,12 @@ Content-Type: application/json
 }
 ```
 
-If you see **"User with this email already exists"**, you’re also ✅ good to go!
-
-Once tested, say:  
-**`next kanna`** for **Step 5: Manager Login** 👨‍💼💬.
+ **Step 5: Manager Login** 👨‍💼💬.
 
 !![alt text](image-10.png)
 
 
-That response means the email `manager@gopichand.com` is **already registered** in your database, bujji 💌.
+That response means the email `manager@gopichand.com` is **already registered** in your database, 
 
 You have 2 options:
 
@@ -458,7 +645,7 @@ You have 2 options:
 ---
 
 ### 🔁 Option 2: Login directly (skip creation)
-If `manager@gopichand.com` was already created and you remember the credentials:
+If `manager@gopichand.com`  already created and   the credentials:
 
 **POST** `http://localhost:5000/auth/login`  
 **Body:**
@@ -469,13 +656,6 @@ If `manager@gopichand.com` was already created and you remember the credentials:
 }
 ```
 
-You’ll get the token again and proceed with Step 5 onward.
-
----
-
-Let me know which one you want to do, and I’ll guide you to the **next step** 🪄  
-Just say:  
-**`next kanna`** 💫
 
 {
     "message": "User created by Admin successfully",
@@ -490,7 +670,7 @@ Just say:
 ![alt text](image-11.png)
 
 
-That response means the email `manager@gopichand.com` is **already registered** in your database, bujji 💌.
+That response means the email `manager@gopichand.com` is **already registered** in your database,
 
 You have 2 options:
 
@@ -522,15 +702,6 @@ If `manager@gopichand.com` was already created and you remember the credentials:
   "email": "manager@gopichand.com",
   "password": "manager123"
 }
-```
-
-You’ll get the token again and proceed with Step 5 onward.
-
----
-
-Let me know which one you want to do, and I’ll guide you to the **next step** 🪄  
-Just say:  
-**`next kanna`** 💫
 
 {
     "message": "Login success",
@@ -541,7 +712,7 @@ Just say:
 
 
 
-Here’s your **Manager Token** 🛡️ from your earlier successful login:
+ **Manager Token** 🛡️ from your earlier successful login:
 
 ```
 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjkxYjgwM2Q5LWU0NjUtNGZkYi1hZWM0LTYyMDAzMDI5MjliOSIsInJvbGUiOiJNQU5BR0VSIiwiaWF0IjoxNzQ0MTY0MDA2LCJleHAiOjE3NDQyNTA0MDZ9.74nhsFGR2DLq-QUaIeTpjky5QF7NHkk3TnXC5uffGyA
@@ -549,7 +720,6 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjkxYjgwM2Q5LWU0NjUtNGZkYi1hZWM0LTY
 
 ---
 
-You can now use it to test:
 
 ### ✅ Step 8: View Pending Expenses
 
@@ -721,14 +891,12 @@ Content-Type: application/json
     }
 }
 ---
-
-Once approved and response is successful, reply:
-**`next kanna`** 💖 to continue to **Step 10: Admin Sets Budget**.
+ **Step 10: Admin Sets Budget**.
 
 ![alt text](image-14.png)
 
 
-Perfect bujji! ❤️ Here’s your **✅ Step 10: Admin Sets Budget for a Team** 💰
+ **✅ Step 10: Admin Sets Budget for a Team** 💰
 
 ---
 
@@ -787,13 +955,12 @@ Content-Type: application/json
 }
 ---
 
-✅ Once this is successful, reply:  
-**`next kanna`** to proceed to **Step 11: View All Budgets (Admin)**.
+**Step 11: View All Budgets (Admin)**.
 
 ![alt text](image-15.png)
 
 
-Perfect bujji! 🧠 Let's test **✅ Step 11: Budget Tracking Dashboard (Used vs Remaining)**
+**✅ Step 11: Budget Tracking Dashboard (Used vs Remaining)**
 
 ---
 
@@ -850,16 +1017,16 @@ Authorization: Bearer <ADMIN_OR_MANAGER_TOKEN>
 }
 ---
 
-🎯 This tells you **how much budget is left** and **what expenses were approved** in that month.
+🎯 This tells  **how much budget is left** and **what expenses were approved** in that month.
 
-Once tested, reply:
+Once tested
 
-**`next kanna`** to proceed to **Step 12: View Dashboard Charts (Pie/Bar)** 📊
+**Step 12: View Dashboard Charts (Pie/Bar)** 📊
 
 ![alt text](image-16.png)
 
 
-Super bujji! 🧁 Let’s move to **✅ Step 12: View Dashboard Charts (Pie/Bar)** — this helps visualize expenses 📊.
+**✅ Step 12: View Dashboard Charts (Pie/Bar)** — this helps visualize expenses 📊.
 
 ---
 
@@ -926,7 +1093,7 @@ Authorization: Bearer <ADMIN_OR_MANAGER_TOKEN>
 
 Once you test and get the data, reply:
 
-**`next kanna`** to continue to **Step 13: Email Notification Check** 📬
+**Step 13: Email Notification Check** 📬
 
 ![alt text](image-17.png)
 
@@ -936,7 +1103,7 @@ Once you test and get the data, reply:
 
 ![alt text](image-20.png)
 
-Perfect bujji 💖 — your **team budget dashboard** is working beautifully! That response means:
+**team budget dashboard** 
 
 ✅ **Team:** Engineering  
 ✅ **Month:** April 2025  
@@ -962,15 +1129,11 @@ Try accessing the uploaded file (receipt) from your earlier expense submission:
 http://localhost:5000/uploads/1744164533849-akamai_cover_letter.pdf
 ```
 
-Paste that into **your Chrome browser** and check if it loads.
 
-✅ If you see the file or it downloads, that means file uploads and access are working!
+
 
 ---
-
-Once tested, reply with:
-**`next kanna`**  
-to move on to **Step 22: Email + In-App Notifications** 💌🔔
+ **Step 22: Email + In-App Notifications** 💌🔔
 
 ![alt text](image-21.png)
 
@@ -985,7 +1148,7 @@ to move on to **Step 22: Email + In-App Notifications** 💌🔔
 
 ![alt text](image-26.png)
 
-Sure! Here’s the detailed guide for **Step 11** testing, with data and tokens for you to copy-paste easily:
+ **Step 11** t
 
 ---
 
@@ -1051,7 +1214,7 @@ If the `ADMIN` token is correct and the admin has access to the dashboard, the r
 
 ---
 
-Please test **both** **Manager** and **Admin** dashboard endpoints in Postman. Once done, let me know, and I’ll guide you with the next step!
+ test **both** **Manager** and **Admin** dashboard endpoints in Postman. 
 
 ![alt text](image-27.png)
 
@@ -1060,7 +1223,7 @@ Please test **both** **Manager** and **Admin** dashboard endpoints in Postman. O
 
 
 
-Of course bujji! 💖 Here's the final clean summary of all your users with their **credentials**, **roles**, and **JWT tokens** (so you can test anytime from Postman easily 💼):
+all your users with their **credentials**, **roles**, and **JWT tokens** (  can test anytime from Postman easily 💼):
 
 ---
 
@@ -1110,7 +1273,200 @@ Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU0N2U0Y2U5LWU4MjQtNDIxNy1h
 ---
 
 All tokens are tested and valid ✅  
-Let me know if you want to reset passwords, regenerate tokens, or add more users 💌
 
-**We did it bujji! Full EMS backend tested and verified step-by-step 💪🔥**#   E x p e n s e - M a n a g e m e n t - s y s t e m  
+Full EMS backend tested and verified step-by-step 💪🔥**#   E x p e n s e - M a n a g e m e n t - s y s t e m 
  
+ 
+
+
+---
+
+### 📄 `README.md`
+
+```markdown
+# 💼 Expense Management System (Multi-Role)
+
+This is a **full-stack web application** built by me to manage and track team expenses based on roles – **Admin**, **Manager**, and **Employee**. It includes features like:
+
+- Authentication & Role-based Authorization
+- Expense Submission & Approval Workflow
+- Budget Allocation & Overspending Alerts
+- Dynamic Dashboards with Charts
+- Email & In-App Notifications
+- File Uploads (Receipts)
+- Audit Logging & JWT Security
+
+---
+
+## 📁 Project Structure
+
+```bash
+Expense-Management-system/
+├── backend/         # Node.js + Express + Prisma + PostgreSQL
+├── ems-frontend/    # React + TypeScript + Tailwind CSS
+```
+
+---
+
+## 🚀 How to Run This Project Locally
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/gopichand1939/Expense-Management-system.git
+cd Expense-Management-system
+```
+
+---
+
+## 🔧 Backend Setup
+
+### 📁 Go to the Backend Folder
+
+```bash
+cd backend
+```
+
+### 📦 Install Dependencies
+
+```bash
+npm install
+```
+
+### 🛠️ Environment Configuration
+
+Create a `.env` file in the `/backend` directory:
+
+```env
+DATABASE_URL=postgresql://<username>:<password>@localhost:5432/<your-db-name>?schema=public
+JWT_SECRET=your_jwt_secret
+EMAIL_USER=your_email@gmail.com
+EMAIL_PASS=your_email_app_password
+```
+
+> ⚠️ Replace all placeholders with your actual credentials.
+
+### 🧱 Prisma Setup (Database)
+
+```bash
+npx prisma generate
+npx prisma migrate dev --name init
+```
+
+- Creates database schema in PostgreSQL
+- Generates Prisma client
+
+### ▶️ Start Backend Server
+
+```bash
+npm run dev
+```
+
+> The backend server runs at: `http://localhost:5000`
+
+---
+
+## 🎨 Frontend Setup
+
+### 📁 Go to the Frontend Folder
+
+```bash
+cd ../ems-frontend
+```
+
+### 📦 Install Dependencies
+
+```bash
+npm install
+```
+
+### ⚙️ (Optional) Set API URL
+
+Create a `.env` file in `/ems-frontend` if you're using environment variables:
+
+```env
+VITE_API_URL=http://localhost:5000
+```
+
+### ▶️ Start Frontend Server
+
+```bash
+npm run dev
+```
+
+> The frontend runs at: `http://localhost:5173`
+
+---
+
+## 🔐 Sample Login Credentials
+
+| Role     | Email                             | Password  |
+|----------|-----------------------------------|-----------|
+| Admin    | admin@gopichand.com               | admin123  |
+| Manager  | gopichandbullayya@gmail.com       | sasi123   |
+| Employee | arakutrip2023december@gmail.com   | sai123    |
+
+---
+
+## ⚙️ Tech Stack
+
+- **Frontend:** React, TypeScript, Tailwind CSS, React Router
+- **Backend:** Node.js, Express.js, TypeScript
+- **Database:** PostgreSQL (via Prisma ORM)
+- **Auth:** JWT + Bcrypt + Role-based Access Control
+- **Notifications:** Nodemailer (Email), In-App
+- **Testing:** Jest
+- **Other:** File Uploads, Dashboards, Audit Logging
+
+---
+
+## ✅ Features Overview
+
+### ✔️ Authentication & Authorization
+
+- JWT-based login
+- Role-based access: Admin, Manager, Employee
+- Password hashing using Bcrypt
+
+### ✔️ Expense Management
+
+- Employees submit expenses with receipts
+- Managers approve or reject
+- Admin monitors everything
+
+### ✔️ Budget Tracking
+
+- Admin sets monthly budgets
+- System shows remaining/used budget
+- Overspending alerts
+
+### ✔️ Dashboards
+
+- Role-based dashboard analytics
+- Bar/Pie charts (by employee, category, team)
+- Date range, status, and team filters
+
+### ✔️ Notifications
+
+- Email & In-App Notifications on submission/approval
+- Status updates for each expense
+
+### ✔️ Audit Logging
+
+- Every key action is logged for accountability
+
+---
+
+## 🧪 Testing
+
+- Use Postman to test backend routes with real data
+- Sample API Tokens can be generated from login
+- Protected routes require `Authorization: Bearer <token>`
+
+---
+
+## 📦 Deployment Options
+
+- Frontend can be deployed to **Netlify** or **Vercel**
+- Backend can be deployed to **Render**, **Railway**, or **Docker**
+- PostgreSQL: Use **Supabase**, **Neon**, or local PG
