@@ -43,18 +43,22 @@ backend/
 ## 📦 How to Install & Run Backend Locally
 
 ### Step 1: Clone the Repository
+
 ```bash
 git clone https://github.com/gopichand1939/Expense-Management-system.git
 cd Expense-Management-system/backend
 ```
 
 ### Step 2: Install Dependencies
+
 ```bash
 npm install
 ```
 
 ### Step 3: Configure `.env`
+
 Create a `.env` file and add:
+
 ```env
 DATABASE_URL=postgresql://<username>:<password>@localhost:5432/<dbname>?schema=public
 JWT_SECRET=your_secret
@@ -63,15 +67,18 @@ EMAIL_PASS=your_app_password
 ```
 
 ### Step 4: Set up Database with Prisma
+
 ```bash
 npx prisma generate
 npx prisma migrate dev --name init
 ```
 
 ### Step 5: Start the Server
+
 ```bash
 npm run dev
 ```
+
 > Server runs at: `http://localhost:5000`
 
 ---
@@ -79,10 +86,11 @@ npm run dev
 ## 🔌 Tested Endpoints & Sample Payloads
 
 ### 🔐 Authentication
-| Method | Endpoint | Description |
-|--------|----------|-------------|
+
+| Method | Endpoint     | Description                    |
+| ------ | ------------ | ------------------------------ |
 | POST   | /auth/signup | Register new user (Admin only) |
-| POST   | /auth/login  | Login, returns JWT token |
+| POST   | /auth/login  | Login, returns JWT token       |
 
 ```json
 // Login Request
@@ -95,19 +103,21 @@ npm run dev
 ---
 
 ### 👤 Admin Routes
-| Method | Endpoint | Description |
-|--------|----------|-------------|
+
+| Method | Endpoint           | Description                |
+| ------ | ------------------ | -------------------------- |
 | POST   | /admin/create-user | Create Manager or Employee |
-| GET    | /admin/dashboard | View system-wide data |
+| GET    | /admin/dashboard   | View system-wide data      |
 
 ---
 
 ### 🧑‍💼 Manager Routes
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET    | /manager/dashboard | View team status, budgets |
-| GET    | /manager/expenses | List pending team expenses |
-| PATCH  | /manager/expenses/:id | Approve/Reject expense |
+
+| Method | Endpoint              | Description                |
+| ------ | --------------------- | -------------------------- |
+| GET    | /manager/dashboard    | View team status, budgets  |
+| GET    | /manager/expenses     | List pending team expenses |
+| PATCH  | /manager/expenses/:id | Approve/Reject expense     |
 
 ```json
 // Approve Expense
@@ -119,8 +129,9 @@ npm run dev
 ---
 
 ### 🧑‍🔧 Employee Routes
-| Method | Endpoint | Description |
-|--------|----------|-------------|
+
+| Method | Endpoint         | Description                      |
+| ------ | ---------------- | -------------------------------- |
 | POST   | /expenses/submit | Submit a new expense (form-data) |
 
 **Form-Data Payload:**
@@ -136,16 +147,18 @@ npm run dev
 ---
 
 ### 📊 Dashboard Routes
-| Method | Endpoint | Description |
-|--------|----------|-------------|
+
+| Method | Endpoint               | Description                 |
+| ------ | ---------------------- | --------------------------- |
 | GET    | /dashboard/team-budget | Budget status by team/month |
-| GET    | /dashboard/charts | Pie/Bar chart summary |
+| GET    | /dashboard/charts      | Pie/Bar chart summary       |
 
 ---
 
 ### 💰 Budget Routes (Admin Only)
-| Method | Endpoint | Description |
-|--------|----------|-------------|
+
+| Method | Endpoint    | Description             |
+| ------ | ----------- | ----------------------- |
 | POST   | /budget/set | Set monthly team budget |
 
 ```json
@@ -159,29 +172,33 @@ npm run dev
 ---
 
 ### 📬 Notifications
-| Method | Endpoint | Description |
-|--------|----------|-------------|
+
+| Method | Endpoint       | Description                |
+| ------ | -------------- | -------------------------- |
 | GET    | /notifications | Fetch in-app notifications |
 
 ---
 
 ## ✅ Live Test Users (for Postman Testing)
 
-| Role | Email | Password |
-|------|-------|----------|
-| Admin | admin@gopichand.com | admin123 |
-| Manager | manager@gopichand.com | manager123 |
+| Role     | Email                  | Password    |
+| -------- | ---------------------- | ----------- |
+| Admin    | admin@gopichand.com    | admin123    |
+| Manager  | manager@gopichand.com  | manager123  |
 | Employee | employee@gopichand.com | employee123 |
 
 ---
 
 ## 📁 Upload Access Test
+
 Uploaded receipts can be accessed at:
+
 ```
 GET http://localhost:5000/uploads/<FILENAME>
 ```
 
 Example:
+
 ```
 http://localhost:5000/uploads/1744164533849-akamai_cover_letter.pdf
 ```
@@ -189,14 +206,17 @@ http://localhost:5000/uploads/1744164533849-akamai_cover_letter.pdf
 ---
 
 ## 📧 Email Setup (via Nodemailer)
+
 Works using Gmail App Passwords.
 Emails are sent on:
+
 - Expense Submission
 - Approval/Rejection
 
 ---
 
 ## ✅ Testing Tools Used
+
 - Postman – API testing
 - Prisma Studio – Database GUI
 - Jest – Unit testing setup
@@ -204,6 +224,7 @@ Emails are sent on:
 ---
 
 ## 🧠 Author
+
 **Tummapala Gopichand**  
 Email: tummapalagopichand@gmail.com  
 GitHub: [gopichand1939](https://github.com/gopichand1939)
@@ -213,20 +234,21 @@ GitHub: [gopichand1939](https://github.com/gopichand1939)
 ---
 
 **📎 Note:** All tokens used for testing are valid and scoped by role. Always include:
+
 ```
 Authorization: Bearer <your_token>
 ```
 
-
-
 ### ✅ **Step 1: Admin Signup**
 
-**Endpoint:**  
+**Endpoint:**
+
 ```
 POST http://localhost:5000/auth/signup
 ```
 
 **Request Body (JSON):**
+
 ```json
 {
   "name": "Gopichand Admin",
@@ -237,6 +259,7 @@ POST http://localhost:5000/auth/signup
 ```
 
 **Expected Response:**
+
 ```json
 {
   "message": "User created",
@@ -268,18 +291,19 @@ POST http://localhost:5000/auth/signup
 
 
 ```
+
 ![alt text](image.png)
-
-
 
 ### ✅ **Step 2: Admin Login (Get Token)**
 
-**Endpoint:**  
+**Endpoint:**
+
 ```
 POST http://localhost:5000/auth/login
 ```
 
 **Request Body (JSON):**
+
 ```json
 {
   "email": "admin@gopichand.com",
@@ -288,22 +312,21 @@ POST http://localhost:5000/auth/login
 ```
 
 **Expected Response:**
+
 ```json
 {
   "message": "Login success",
   "token": "your_admin_jwt_token_here"
-
 }
-
 ```
-
 
 Bearer your_admin_jwt_token_here
 
 {
-    "message": "Login success",
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIyMzcxYTg0LWJhMGEtNGFmZi1hMTUwLTEyNDc5NWE2YmZhNCIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc0NDE2MzU0NSwiZXhwIjoxNzQ0MjQ5OTQ1fQ.pM38sbW0_XN2NUzyxeDZFZ-5Co-Y0qiO-4UD_1BC-Tk"
+"message": "Login success",
+"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIyMzcxYTg0LWJhMGEtNGFmZi1hMTUwLTEyNDc5NWE2YmZhNCIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc0NDE2MzU0NSwiZXhwIjoxNzQ0MjQ5OTQ1fQ.pM38sbW0_XN2NUzyxeDZFZ-5Co-Y0qiO-4UD_1BC-Tk"
 }
+
 ```
 ![alt text](image-1.png)
 
@@ -311,16 +334,20 @@ Bearer your_admin_jwt_token_here
 
 
 ---
-**➡️ Endpoint:**  
-```
-POST http://localhost:5000/admin/create-user
+**➡️ Endpoint:**
 ```
 
-**🔐 Headers:**  
+POST http://localhost:5000/admin/create-user
+
 ```
+
+**🔐 Headers:**
+```
+
 Authorization: Bearer <TOKEN_FROM_STEP_2>
 Content-Type: application/json
-```
+
+````
 
 **📝 Body (raw JSON):**
 ```json
@@ -330,9 +357,10 @@ Content-Type: application/json
   "password": "manager123",
   "role": "MANAGER"
 }
-```
+````
 
-*Expected Result:**
+\*Expected Result:\*\*
+
 ```json
 {
   "message": "User created by Admin successfully",
@@ -346,21 +374,20 @@ Content-Type: application/json
 ```
 
 ---
+
 **Step 4: Create Gopichand Employee**.
 
 {
-    "message": "User created by Admin successfully",
-    "user": {
-        "id": "91b803d9-e465-4fdb-aec4-6200302929b9",
-        "name": "Gopichand Manager",
-        "email": "manager@gopichand.com",
-        "role": "MANAGER"
-    }
+"message": "User created by Admin successfully",
+"user": {
+"id": "91b803d9-e465-4fdb-aec4-6200302929b9",
+"name": "Gopichand Manager",
+"email": "manager@gopichand.com",
+"role": "MANAGER"
+}
 }
 
 ![alt text](image-2.png)
-
-
 
 Perfect bujji ❤️! Here's **✅ Step 4** in Postman testing:
 
@@ -368,18 +395,21 @@ Perfect bujji ❤️! Here's **✅ Step 4** in Postman testing:
 
 ### ✅ Step 4: Admin Creates an Employee
 
-**➡️ Endpoint:**  
+**➡️ Endpoint:**
+
 ```
 POST http://localhost:5000/admin/create-user
 ```
 
-**🔐 Headers:**  
+**🔐 Headers:**
+
 ```
 Authorization: Bearer <ADMIN_TOKEN_FROM_STEP_2>
 Content-Type: application/json
 ```
 
 **📝 Body (raw JSON):**
+
 ```json
 {
   "name": "Gopichand Employee",
@@ -390,6 +420,7 @@ Content-Type: application/json
 ```
 
 📌 **Expected Response:**
+
 ```json
 {
   "message": "User created by Admin successfully",
@@ -405,29 +436,30 @@ Content-Type: application/json
 ---**Step 5: Login as Manager** 💼.
 
 {
-    "message": "User created by Admin successfully",
-    "user": {
-        "id": "547e4ce9-e824-4217-a3ad-a88e0c87e488",
-        "name": "Gopichand Employee",
-        "email": "employee@gopichand.com",
-        "role": "EMPLOYEE"
-    }
+"message": "User created by Admin successfully",
+"user": {
+"id": "547e4ce9-e824-4217-a3ad-a88e0c87e488",
+"name": "Gopichand Employee",
+"email": "employee@gopichand.com",
+"role": "EMPLOYEE"
+}
 }
 ![alt text](image-3.png)
 
-
- Login as Manager**
+Login as Manager\*\*
 
 ---
 
 ### ✅ Step 5: Manager Login
 
-**➡️ Endpoint:**  
+**➡️ Endpoint:**
+
 ```
 POST http://localhost:5000/auth/login
 ```
 
 **📝 Body (raw JSON):**
+
 ```json
 {
   "email": "manager@gopichand.com",
@@ -436,6 +468,7 @@ POST http://localhost:5000/auth/login
 ```
 
 📌 **Expected Response:**
+
 ```json
 {
   "message": "Login success",
@@ -443,28 +476,27 @@ POST http://localhost:5000/auth/login
 }
 ```
 
-
 **Step 6: Login as Employee** 👨‍💻
 
 {
-    "message": "Login success",
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjkxYjgwM2Q5LWU0NjUtNGZkYi1hZWM0LTYyMDAzMDI5MjliOSIsInJvbGUiOiJNQU5BR0VSIiwiaWF0IjoxNzQ0MTY0MDA2LCJleHAiOjE3NDQyNTA0MDZ9.74nhsFGR2DLq-QUaIeTpjky5QF7NHkk3TnXC5uffGyA"
+"message": "Login success",
+"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjkxYjgwM2Q5LWU0NjUtNGZkYi1hZWM0LTYyMDAzMDI5MjliOSIsInJvbGUiOiJNQU5BR0VSIiwiaWF0IjoxNzQ0MTY0MDA2LCJleHAiOjE3NDQyNTA0MDZ9.74nhsFGR2DLq-QUaIeTpjky5QF7NHkk3TnXC5uffGyA"
 }
 
 ![alt text](image-4.png)
 
-
 **Manager Token** 🛡️
-
 
 ### ✅ Step 6: Login as Employee
 
-**➡️ Endpoint:**  
+**➡️ Endpoint:**
+
 ```
 POST http://localhost:5000/auth/login
 ```
 
 **📝 Body (raw JSON):**
+
 ```json
 {
   "email": "employee@gopichand.com",
@@ -473,6 +505,7 @@ POST http://localhost:5000/auth/login
 ```
 
 📌 **Expected Response:**
+
 ```json
 {
   "message": "Login success",
@@ -480,14 +513,13 @@ POST http://localhost:5000/auth/login
 }
 ```
 
-
 ---
 
 **Step 7: Submit an Expense (Employee)** 💸
 
 {
-    "message": "Login success",
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU0N2U0Y2U5LWU4MjQtNDIxNy1hM2FkLWE4OGUwYzg3ZTQ4OCIsInJvbGUiOiJFTVBMT1lFRSIsImlhdCI6MTc0NDE2NDExNSwiZXhwIjoxNzQ0MjUwNTE1fQ.KtKE-oZNMTwZaD2ztI9R4ZtBvhLOnfBTZO3L8y6fhbk"
+"message": "Login success",
+"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU0N2U0Y2U5LWU4MjQtNDIxNy1hM2FkLWE4OGUwYzg3ZTQ4OCIsInJvbGUiOiJFTVBMT1lFRSIsImlhdCI6MTc0NDE2NDExNSwiZXhwIjoxNzQ0MjUwNTE1fQ.KtKE-oZNMTwZaD2ztI9R4ZtBvhLOnfBTZO3L8y6fhbk"
 }
 
 ![alt text](image-6.png)
@@ -496,12 +528,14 @@ POST http://localhost:5000/auth/login
 
 ### ✅ Step 7: Submit an Expense (EMPLOYEE)
 
-**➡️ Endpoint:**  
+**➡️ Endpoint:**
+
 ```
 POST http://localhost:5000/expenses/submit
 ```
 
-**🛡️ Authorization (Header):**  
+**🛡️ Authorization (Header):**
+
 ```
 Bearer <EMPLOYEE_TOKEN>
 ```
@@ -509,18 +543,19 @@ Bearer <EMPLOYEE_TOKEN>
 **🧾 Body Type:**  
 `form-data`
 
-| Key       | Value                       | Type     |
-|-----------|-----------------------------|----------|
-| amount    | 2500                        | Text     |
-| category  | Travel                      | Text     |
-| project   | EMS                         | Text     |
-| date      | 2025-04-09                  | Text     |
-| notes     | Cab from office to site     | Text     |
-| receipt   | (Upload a sample .png/.pdf) | File     |
+| Key      | Value                       | Type |
+| -------- | --------------------------- | ---- |
+| amount   | 2500                        | Text |
+| category | Travel                      | Text |
+| project  | EMS                         | Text |
+| date     | 2025-04-09                  | Text |
+| notes    | Cab from office to site     | Text |
+| receipt  | (Upload a sample .png/.pdf) | File |
 
 ---
 
 📌 **Expected Response:**
+
 ```json
 {
   "message": "Expense submitted successfully",
@@ -536,46 +571,45 @@ Bearer <EMPLOYEE_TOKEN>
 **Step 8: View Pending Expenses (Manager)** 👨‍💼✅
 
 {
-    "message": "Expense submitted successfully",
-    "expense": {
-        "id": "138d8d65-3431-4633-8165-d44c03a42659",
-        "amount": 2500,
-        "category": "Travel",
-        "project": null,
-        "date": "2025-04-09T00:00:00.000Z",
-        "notes": "Cab from office to site",
-        "receipt": "1744164533849-akamai_cover_letter.pdf",
-        "status": "PENDING",
-        "employeeId": "547e4ce9-e824-4217-a3ad-a88e0c87e488",
-        "createdAt": "2025-04-09T02:08:53.860Z",
-        "updatedAt": "2025-04-09T02:08:53.860Z",
-        "employee": {
-            "email": "employee@gopichand.com",
-            "name": "Gopichand Employee"
-        }
-    }
+"message": "Expense submitted successfully",
+"expense": {
+"id": "138d8d65-3431-4633-8165-d44c03a42659",
+"amount": 2500,
+"category": "Travel",
+"project": null,
+"date": "2025-04-09T00:00:00.000Z",
+"notes": "Cab from office to site",
+"receipt": "1744164533849-akamai_cover_letter.pdf",
+"status": "PENDING",
+"employeeId": "547e4ce9-e824-4217-a3ad-a88e0c87e488",
+"createdAt": "2025-04-09T02:08:53.860Z",
+"updatedAt": "2025-04-09T02:08:53.860Z",
+"employee": {
+"email": "employee@gopichand.com",
+"name": "Gopichand Employee"
+}
+}
 }
 
 ![alt text](image-7.png)
 
-
-
-Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIyMzcxYTg0LWJhMGEtNGFmZi1hMTUwLTEyNDc5NWE2YmZhNCIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc0NDE2MzU0NSwiZXhwIjoxNzQ0MjQ5OTQ1fQ.pM38sbW0_XN2NUzyxeDZFZ-5Co-Y0qiO-4UD_1BC-Tk      
+Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIyMzcxYTg0LWJhMGEtNGFmZi1hMTUwLTEyNDc5NWE2YmZhNCIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc0NDE2MzU0NSwiZXhwIjoxNzQ0MjQ5OTQ1fQ.pM38sbW0_XN2NUzyxeDZFZ-5Co-Y0qiO-4UD_1BC-Tk
 
          http://localhost:5000/admin/create-user{
-  "name": "Bujji Manager",
-  "email": "manager@gopichand.com",
-  "password": "manager123",
-  "role": "MANAGER"
+
+"name": "Bujji Manager",
+"email": "manager@gopichand.com",
+"password": "manager123",
+"role": "MANAGER"
 }
 {
-    "message": "User with this email already exists"
+"message": "User with this email already exists"
 }
 ![
-    
+
 ](image-8.png)
 
- **Step 3**.
+**Step 3**.
 
 ---
 
@@ -583,18 +617,21 @@ Now let’s move to the next one! 🎯
 
 ### ✅ Step 4: Admin Creates Gopichand Employee
 
-**➡️ Endpoint:**  
+**➡️ Endpoint:**
+
 ```
 POST http://localhost:5000/admin/create-user
 ```
 
-**🔐 Headers:**  
+**🔐 Headers:**
+
 ```
 Authorization: Bearer <ADMIN_TOKEN_FROM_STEP 2>
 Content-Type: application/json
 ```
 
 **📝 Body (raw JSON):**
+
 ```json
 {
   "name": "Bujji Employee",
@@ -605,6 +642,7 @@ Content-Type: application/json
 ```
 
 **Expected:**
+
 ```json
 {
   "message": "User created by Admin successfully",
@@ -617,58 +655,9 @@ Content-Type: application/json
 }
 ```
 
- **Step 5: Manager Login** 👨‍💼💬.
+**Step 5: Manager Login** 👨‍💼💬.
 
 !![alt text](image-10.png)
-
-
-That response means the email `manager@gopichand.com` is **already registered** in your database, 
-
-You have 2 options:
-
----
-
-### ✅ Option 1: Use a **new unique email**  
-**Recommended if you’re testing again.**
-
-**POST** `http://localhost:5000/admin/create-user`  
-**Body:**
-```json
-{
-  "name": "Bujji Manager 2",
-  "email": "manager2@gopichand.com",
-  "password": "manager123",
-  "role": "MANAGER"
-}
-```
-
----
-
-### 🔁 Option 2: Login directly (skip creation)
-If `manager@gopichand.com`  already created and   the credentials:
-
-**POST** `http://localhost:5000/auth/login`  
-**Body:**
-```json
-{
-  "email": "manager@gopichand.com",
-  "password": "manager123"
-}
-```
-
-
-{
-    "message": "User created by Admin successfully",
-    "user": {
-        "id": "d8b9ae31-2b5c-4bec-8f3e-52843eb0cce3",
-        "name": "Bujji Manager 2",
-        "email": "manager2@gopichand.com",
-        "role": "MANAGER"
-    }
-}
-
-![alt text](image-11.png)
-
 
 That response means the email `manager@gopichand.com` is **already registered** in your database,
 
@@ -676,11 +665,13 @@ You have 2 options:
 
 ---
 
-### ✅ Option 1: Use a **new unique email**  
+### ✅ Option 1: Use a **new unique email**
+
 **Recommended if you’re testing again.**
 
 **POST** `http://localhost:5000/admin/create-user`  
 **Body:**
+
 ```json
 {
   "name": "Bujji Manager 2",
@@ -693,10 +684,62 @@ You have 2 options:
 ---
 
 ### 🔁 Option 2: Login directly (skip creation)
+
+If `manager@gopichand.com` already created and the credentials:
+
+**POST** `http://localhost:5000/auth/login`  
+**Body:**
+
+```json
+{
+  "email": "manager@gopichand.com",
+  "password": "manager123"
+}
+```
+
+{
+"message": "User created by Admin successfully",
+"user": {
+"id": "d8b9ae31-2b5c-4bec-8f3e-52843eb0cce3",
+"name": "Bujji Manager 2",
+"email": "manager2@gopichand.com",
+"role": "MANAGER"
+}
+}
+
+![alt text](image-11.png)
+
+That response means the email `manager@gopichand.com` is **already registered** in your database,
+
+You have 2 options:
+
+---
+
+### ✅ Option 1: Use a **new unique email**
+
+**Recommended if you’re testing again.**
+
+**POST** `http://localhost:5000/admin/create-user`  
+**Body:**
+
+```json
+{
+  "name": "Bujji Manager 2",
+  "email": "manager2@gopichand.com",
+  "password": "manager123",
+  "role": "MANAGER"
+}
+```
+
+---
+
+### 🔁 Option 2: Login directly (skip creation)
+
 If `manager@gopichand.com` was already created and you remember the credentials:
 
 **POST** `http://localhost:5000/auth/login`  
 **Body:**
+
 ```json
 {
   "email": "manager@gopichand.com",
@@ -715,7 +758,9 @@ If `manager@gopichand.com` was already created and you remember the credentials:
  **Manager Token** 🛡️ from your earlier successful login:
 
 ```
+
 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjkxYjgwM2Q5LWU0NjUtNGZkYi1hZWM0LTYyMDAzMDI5MjliOSIsInJvbGUiOiJNQU5BR0VSIiwiaWF0IjoxNzQ0MTY0MDA2LCJleHAiOjE3NDQyNTA0MDZ9.74nhsFGR2DLq-QUaIeTpjky5QF7NHkk3TnXC5uffGyA
+
 ```
 
 ---
@@ -723,19 +768,23 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjkxYjgwM2Q5LWU0NjUtNGZkYi1hZWM0LTY
 
 ### ✅ Step 8: View Pending Expenses
 
-**URL:**  
+**URL:**
 ```
+
 GET http://localhost:5000/manager/expenses
+
 ```
 
 **Headers:**
 ```
+
 Authorization: Bearer <paste the above token>
+
 ```
 
 ---
 
-Once tested, just reply:  
+Once tested, just reply:
 **`next kanna`** 💌 to proceed to Step 9.
 
 {
@@ -775,9 +824,11 @@ Use the `id` of a **PENDING** expense submitted by the employee. You can get it 
 
 ---
 
-**➡️ Endpoint:**  
+**➡️ Endpoint:**
 ```
+
 PATCH http://localhost:5000/manager/expenses/<EXPENSE_ID>
+
 ```
 
 📌 Replace `<EXPENSE_ID>` with actual expense ID (e.g. `138d8d65-3431-4633-8165-d44c03a42659`).
@@ -786,18 +837,21 @@ PATCH http://localhost:5000/manager/expenses/<EXPENSE_ID>
 
 **🔐 Headers:**
 ```
+
 Authorization: Bearer <MANAGER_TOKEN>
 Content-Type: application/json
-```
+
+````
 
 **📝 Body (raw JSON):**
 ```json
 {
   "status": "APPROVED"
 }
-```
+````
 
 ✅ You can also test with:
+
 ```json
 {
   "status": "REJECTED"
@@ -807,6 +861,7 @@ Content-Type: application/json
 ---
 
 **📌 Expected Response:**
+
 ```json
 {
   "message": "Expense approved successfully",
@@ -823,8 +878,6 @@ Content-Type: application/json
 Once done successfully, reply:
 **`next kanna`** 💖 to proceed to **Step 10: Set Budget (Admin)**.
 
-
-
 Perfect bujji 💼! You already have the **expense ID**:
 
 ```
@@ -837,7 +890,8 @@ Now use this in the **PATCH endpoint** to approve the expense ✅
 
 ### ✅ Step 9: Approve the Expense (Manager)
 
-**➡️ Endpoint:**  
+**➡️ Endpoint:**
+
 ```
 PATCH http://localhost:5000/manager/expenses/138d8d65-3431-4633-8165-d44c03a42659
 ```
@@ -845,12 +899,14 @@ PATCH http://localhost:5000/manager/expenses/138d8d65-3431-4633-8165-d44c03a4265
 ---
 
 **🔐 Headers:**
+
 ```
 Authorization: Bearer <MANAGER_TOKEN>
 Content-Type: application/json
 ```
 
 **Body (raw JSON):**
+
 ```json
 {
   "status": "APPROVED"
@@ -860,6 +916,7 @@ Content-Type: application/json
 ---
 
 ### ✅ Expected Response:
+
 ```json
 {
   "message": "Expense approved successfully",
@@ -870,39 +927,42 @@ Content-Type: application/json
   }
 }
 ```
+
 {
-    "message": "Expense approved successfully",
-    "expense": {
-        "id": "138d8d65-3431-4633-8165-d44c03a42659",
-        "amount": 2500,
-        "category": "Travel",
-        "project": null,
-        "date": "2025-04-09T00:00:00.000Z",
-        "notes": "Cab from office to site",
-        "receipt": "1744164533849-akamai_cover_letter.pdf",
-        "status": "APPROVED",
-        "employeeId": "547e4ce9-e824-4217-a3ad-a88e0c87e488",
-        "createdAt": "2025-04-09T02:08:53.860Z",
-        "updatedAt": "2025-04-09T02:39:03.150Z",
-        "employee": {
-            "email": "employee@gopichand.com",
-            "name": "Gopichand Employee"
-        }
-    }
+"message": "Expense approved successfully",
+"expense": {
+"id": "138d8d65-3431-4633-8165-d44c03a42659",
+"amount": 2500,
+"category": "Travel",
+"project": null,
+"date": "2025-04-09T00:00:00.000Z",
+"notes": "Cab from office to site",
+"receipt": "1744164533849-akamai_cover_letter.pdf",
+"status": "APPROVED",
+"employeeId": "547e4ce9-e824-4217-a3ad-a88e0c87e488",
+"createdAt": "2025-04-09T02:08:53.860Z",
+"updatedAt": "2025-04-09T02:39:03.150Z",
+"employee": {
+"email": "employee@gopichand.com",
+"name": "Gopichand Employee"
 }
+}
+}
+
 ---
- **Step 10: Admin Sets Budget**.
+
+**Step 10: Admin Sets Budget**.
 
 ![alt text](image-14.png)
 
-
- **✅ Step 10: Admin Sets Budget for a Team** 💰
+**✅ Step 10: Admin Sets Budget for a Team** 💰
 
 ---
 
 ### ✅ **Step 10: Set Budget (Admin)**
 
-**➡️ Endpoint:**  
+**➡️ Endpoint:**
+
 ```
 POST http://localhost:5000/budget/set
 ```
@@ -910,6 +970,7 @@ POST http://localhost:5000/budget/set
 ---
 
 **🛡️ Headers:**
+
 ```
 Authorization: Bearer <ADMIN_TOKEN>
 Content-Type: application/json
@@ -918,6 +979,7 @@ Content-Type: application/json
 ---
 
 **📝 Body (raw JSON):**
+
 ```json
 {
   "team": "Engineering",
@@ -929,6 +991,7 @@ Content-Type: application/json
 ---
 
 📌 **Expected Response:**
+
 ```json
 {
   "message": "Budget set successfully",
@@ -942,23 +1005,24 @@ Content-Type: application/json
   }
 }
 ```
+
 {
-    "message": "Budget set successfully",
-    "budget": {
-        "id": "bc64b798-0b43-4438-8c10-32322be862d0",
-        "team": "Engineering",
-        "limit": 50000,
-        "month": "April 2025",
-        "createdAt": "2025-04-09T02:44:49.335Z",
-        "updatedAt": "2025-04-09T02:44:49.335Z"
-    }
+"message": "Budget set successfully",
+"budget": {
+"id": "bc64b798-0b43-4438-8c10-32322be862d0",
+"team": "Engineering",
+"limit": 50000,
+"month": "April 2025",
+"createdAt": "2025-04-09T02:44:49.335Z",
+"updatedAt": "2025-04-09T02:44:49.335Z"
 }
+}
+
 ---
 
 **Step 11: View All Budgets (Admin)**.
 
 ![alt text](image-15.png)
-
 
 **✅ Step 11: Budget Tracking Dashboard (Used vs Remaining)**
 
@@ -967,11 +1031,13 @@ Content-Type: application/json
 ### ✅ Step 11: Get Budget Usage Summary (for Admin or Manager)
 
 **📈 Endpoint:**
+
 ```
 GET http://localhost:5000/dashboard/team-budget?team=Engineering&month=April 2025
 ```
 
 **🔐 Headers:**
+
 ```
 Authorization: Bearer <ADMIN_OR_MANAGER_TOKEN>
 ```
@@ -979,6 +1045,7 @@ Authorization: Bearer <ADMIN_OR_MANAGER_TOKEN>
 ---
 
 ### 📘 What It Returns:
+
 - Total Budget Limit
 - Amount Used
 - Remaining Budget
@@ -988,6 +1055,7 @@ Authorization: Bearer <ADMIN_OR_MANAGER_TOKEN>
 ---
 
 ### ✅ Sample Response:
+
 ```json
 {
   "team": "Engineering",
@@ -1006,25 +1074,26 @@ Authorization: Bearer <ADMIN_OR_MANAGER_TOKEN>
   ]
 }
 ```
+
 {
-    "team": "Engineering",
-    "month": "April 2025",
-    "limit": 50000,
-    "used": 0,
-    "remaining": 50000,
-    "isOverspent": false,
-    "expenses": []
+"team": "Engineering",
+"month": "April 2025",
+"limit": 50000,
+"used": 0,
+"remaining": 50000,
+"isOverspent": false,
+"expenses": []
 }
+
 ---
 
-🎯 This tells  **how much budget is left** and **what expenses were approved** in that month.
+🎯 This tells **how much budget is left** and **what expenses were approved** in that month.
 
 Once tested
 
 **Step 12: View Dashboard Charts (Pie/Bar)** 📊
 
 ![alt text](image-16.png)
-
 
 **✅ Step 12: View Dashboard Charts (Pie/Bar)** — this helps visualize expenses 📊.
 
@@ -1033,11 +1102,13 @@ Once tested
 ### ✅ Step 12: Get Chart Summary (Category-wise + Status-wise)
 
 **📊 Endpoint:**
+
 ```
 GET http://localhost:5000/dashboard/charts
 ```
 
 **🔐 Headers:**
+
 ```
 Authorization: Bearer <ADMIN_OR_MANAGER_TOKEN>
 ```
@@ -1045,12 +1116,14 @@ Authorization: Bearer <ADMIN_OR_MANAGER_TOKEN>
 ---
 
 ### 📝 What It Returns:
+
 1. **categorySummary** – Total spent by category (e.g., Travel, Food)
 2. **statusSummary** – Count of expenses by status (Approved, Pending, etc.)
 
 ---
 
 ### ✅ Sample Response:
+
 ```json
 {
   "categorySummary": [
@@ -1067,27 +1140,30 @@ Authorization: Bearer <ADMIN_OR_MANAGER_TOKEN>
   ]
 }
 ```
+
 {
-    "categorySummary": [
-        {
-            "_sum": {
-                "amount": 5000
-            },
-            "category": "Travel"
-        }
-    ],
-    "statusSummary": [
-        {
-            "_count": {
-                "_all": 2
-            },
-            "status": "APPROVED"
-        }
-    ]
+"categorySummary": [
+{
+"_sum": {
+"amount": 5000
+},
+"category": "Travel"
 }
+],
+"statusSummary": [
+{
+"_count": {
+"_all": 2
+},
+"status": "APPROVED"
+}
+]
+}
+
 ---
 
 📌 You can plug this into frontend charts like:
+
 - Pie chart: Expense categories
 - Bar chart: Status breakdown
 
@@ -1103,7 +1179,7 @@ Once you test and get the data, reply:
 
 ![alt text](image-20.png)
 
-**team budget dashboard** 
+**team budget dashboard**
 
 ✅ **Team:** Engineering  
 ✅ **Month:** April 2025  
@@ -1118,22 +1194,22 @@ Once you test and get the data, reply:
 ### ✅ Now let's test **Step 21: File Uploads (Receipts - Image/PDF)**
 
 #### ➡️ Endpoint:
+
 ```
 GET http://localhost:5000/uploads/<FILENAME>
 ```
 
 #### Example:
+
 Try accessing the uploaded file (receipt) from your earlier expense submission:
 
 ```
 http://localhost:5000/uploads/1744164533849-akamai_cover_letter.pdf
 ```
 
-
-
-
 ---
- **Step 22: Email + In-App Notifications** 💌🔔
+
+**Step 22: Email + In-App Notifications** 💌🔔
 
 ![alt text](image-21.png)
 
@@ -1145,10 +1221,9 @@ http://localhost:5000/uploads/1744164533849-akamai_cover_letter.pdf
 
 ![alt text](image-25.png)
 
-
 ![alt text](image-26.png)
 
- **Step 11** t
+**Step 11** t
 
 ---
 
@@ -1158,7 +1233,8 @@ http://localhost:5000/uploads/1744164533849-akamai_cover_letter.pdf
 
 #### 1. **Test Manager Dashboard** (for role `MANAGER`)
 
-**Endpoint:**  
+**Endpoint:**
+
 ```
 GET http://localhost:5000/manager/dashboard
 ```
@@ -1167,12 +1243,14 @@ GET http://localhost:5000/manager/dashboard
 Set the `Authorization` header with the **Bearer token** from the previous login step for **Manager** (`<MANAGER_TOKEN>`).
 
 **Header:**
+
 ```
 Authorization: Bearer <MANAGER_TOKEN>
 ```
 
 **Expected Response:**  
 If the `MANAGER` token is correct and the manager has access to the dashboard, the response should be like:
+
 ```json
 {
   "message": "Dashboard data retrieved successfully",
@@ -1189,7 +1267,8 @@ If the `MANAGER` token is correct and the manager has access to the dashboard, t
 
 #### 2. **Test Admin Dashboard** (for role `ADMIN`)
 
-**Endpoint:**  
+**Endpoint:**
+
 ```
 GET http://localhost:5000/admin/dashboard
 ```
@@ -1198,12 +1277,14 @@ GET http://localhost:5000/admin/dashboard
 Set the `Authorization` header with the **Bearer token** from the previous login step for **Admin** (`<ADMIN_TOKEN>`).
 
 **Header:**
+
 ```
 Authorization: Bearer <ADMIN_TOKEN>
 ```
 
 **Expected Response:**  
 If the `ADMIN` token is correct and the admin has access to the dashboard, the response should be like:
+
 ```json
 {
   "message": "Dashboard data retrieved successfully",
@@ -1214,28 +1295,26 @@ If the `ADMIN` token is correct and the admin has access to the dashboard, the r
 
 ---
 
- test **both** **Manager** and **Admin** dashboard endpoints in Postman. 
+test **both** **Manager** and **Admin** dashboard endpoints in Postman.
 
 ![alt text](image-27.png)
 
 ![alt text](image-28.png)
 
-
-
-
-all your users with their **credentials**, **roles**, and **JWT tokens** (  can test anytime from Postman easily 💼):
+all your users with their **credentials**, **roles**, and **JWT tokens** ( can test anytime from Postman easily 💼):
 
 ---
 
 ### ✅ **1. Admin – Gopichand Admin**
 
-| Field       | Value                         |
-|-------------|-------------------------------|
-| Name        | Gopichand Admin               |
-| Email       | `admin@gopichand.com`         |
-| Password    | `admin123`                    |
-| Role        | `ADMIN`                       |
-| Token       |  
+| Field    | Value                 |
+| -------- | --------------------- |
+| Name     | Gopichand Admin       |
+| Email    | `admin@gopichand.com` |
+| Password | `admin123`            |
+| Role     | `ADMIN`               |
+| Token    |
+
 ```
 Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIyMzcxYTg0LWJhMGEtNGFmZi1hMTUwLTEyNDc5NWE2YmZhNCIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc0NDE2MzU0NSwiZXhwIjoxNzQ0MjQ5OTQ1fQ.pM38sbW0_XN2NUzyxeDZFZ-5Co-Y0qiO-4UD_1BC-Tk
 ```
@@ -1244,13 +1323,14 @@ Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIyMzcxYTg0LWJhMGEtNGFmZi1h
 
 ### ✅ **2. Manager – Gopichand Manager**
 
-| Field       | Value                         |
-|-------------|-------------------------------|
-| Name        | Gopichand Manager             |
-| Email       | `manager@gopichand.com`       |
-| Password    | `manager123`                  |
-| Role        | `MANAGER`                     |
-| Token       |  
+| Field    | Value                   |
+| -------- | ----------------------- |
+| Name     | Gopichand Manager       |
+| Email    | `manager@gopichand.com` |
+| Password | `manager123`            |
+| Role     | `MANAGER`               |
+| Token    |
+
 ```
 Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjkxYjgwM2Q5LWU0NjUtNGZkYi1hZWM0LTYyMDAzMDI5MjliOSIsInJvbGUiOiJNQU5BR0VSIiwiaWF0IjoxNzQ0MTY0MDA2LCJleHAiOjE3NDQyNTA0MDZ9.74nhsFGR2DLq-QUaIeTpjky5QF7NHkk3TnXC5uffGyA
 ```
@@ -1259,31 +1339,31 @@ Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjkxYjgwM2Q5LWU0NjUtNGZkYi1h
 
 ### ✅ **3. Employee – Gopichand Employee**
 
-| Field       | Value                         |
-|-------------|-------------------------------|
-| Name        | Gopichand Employee            |
-| Email       | `employee@gopichand.com`      |
-| Password    | `employee123`                 |
-| Role        | `EMPLOYEE`                    |
-| Token       |  
+| Field    | Value                    |
+| -------- | ------------------------ |
+| Name     | Gopichand Employee       |
+| Email    | `employee@gopichand.com` |
+| Password | `employee123`            |
+| Role     | `EMPLOYEE`               |
+| Token    |
+
 ```
 Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU0N2U0Y2U5LWU4MjQtNDIxNy1hM2FkLWE4OGUwYzg3ZTQ4OCIsInJvbGUiOiJFTVBMT1lFRSIsImlhdCI6MTc0NDE2NDExNSwiZXhwIjoxNzQ0MjUwNTE1fQ.KtKE-oZNMTwZaD2ztI9R4ZtBvhLOnfBTZO3L8y6fhbk
 ```
 
 ---
 
-All tokens are tested and valid ✅  
+All tokens are tested and valid ✅
 
-Full EMS backend tested and verified step-by-step 💪🔥**#   E x p e n s e - M a n a g e m e n t - s y s t e m 
+Full EMS backend tested and verified step-by-step 💪🔥\*\*#   E x p e n s e - M a n a g e m e n t - s y s t e m 
  
  
-
 
 ---
 
 ### 📄 `README.md`
 
-```markdown
+````markdown
 # 💼 Expense Management System (Multi-Role)
 
 This is a **full-stack web application** built by me to manage and track team expenses based on roles – **Admin**, **Manager**, and **Employee**. It includes features like:
@@ -1305,6 +1385,7 @@ Expense-Management-system/
 ├── backend/         # Node.js + Express + Prisma + PostgreSQL
 ├── ems-frontend/    # React + TypeScript + Tailwind CSS
 ```
+````
 
 ---
 
@@ -1400,11 +1481,11 @@ npm run dev
 
 ## 🔐 Sample Login Credentials
 
-| Role     | Email                             | Password  |
-|----------|-----------------------------------|-----------|
-| Admin    | admin@gopichand.com               | admin123  |
-| Manager  | gopichandbullayya@gmail.com       | sasi123   |
-| Employee | arakutrip2023december@gmail.com   | sai123    |
+| Role     | Email                           | Password |
+| -------- | ------------------------------- | -------- |
+| Admin    | admin@gopichand.com             | admin123 |
+| Manager  | gopichandbullayya@gmail.com     | sasi123  |
+| Employee | arakutrip2023december@gmail.com | sai123   |
 
 ---
 

@@ -96,6 +96,7 @@ export const getAdminDashboard = async (req: Request, res: Response): Promise<vo
         id: true,
         category: true,
         amount: true,
+        notes: true,
         status: true,
         createdAt: true,
         employee: {

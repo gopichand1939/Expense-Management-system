@@ -18,7 +18,7 @@ async function main() {
         email: 'tummapalagopichand@gmail.com',
         password: hashedPassword,
         role: 'ADMIN',
-        team: 'Engineering',
+        team: 'Alpha',
       },
     });
 
